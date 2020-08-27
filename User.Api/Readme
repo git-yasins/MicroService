@@ -77,7 +77,7 @@ https://www.cnblogs.com/l-hh/p/11213506.html
 #DOCKER外部文件挂载卷
 #volumn 方式(单机)
 #mysql
-docker run -d -p 3306:3306 --name mysql01 -v=/document/docker/mysql/config/my.cnf:/etc/my.cnf -v=/document/docker/mysql/data:/var/lib/mysql mysql/mysql-server
+docker run -d -p 3306:3306 --name mysql01 -v=/srv/mysql/config:/etc -v=/srv/mysql/data:/var/lib/mysql mysql/mysql-server
 #mongodb
 docker run -d -p 27017:27017 --name mongo01 -v=/document/docker/mongo/config:/data/configdb -v=/document/docker/mongo/db:/data/db mongo
 vi my.cnf
