@@ -12,8 +12,8 @@ job1:
 job2:
   stage: test
   script:
-    -cd User.Api.UnitTest
-    dotnet test
+    - cd User.Api.UnitTest
+    - dotnet test
 
 job3:
   stage: package
