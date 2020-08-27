@@ -213,3 +213,17 @@ docker run --name nginx01 -d -p 80:80 \
 
 
 docker exec -it gitlab-runner gitlab-runner register  
+
+
+#DOCKER 私有仓库搭建
+https://www.cnblogs.com/edisonchou/p/docker_registry_repository_setup_introduction.html
+
+docker run -d -v /srv/gitlab/images/registry:/var/lib/registry \
+-p 5000:5000 \
+--restart=always \
+--name registry01 registry
+#查看镜像仓库
+curl http://10.211.55.5:5000/v2/_catalog
+
+#打 TAG
+docker tag userapi:test 10.211.55:5000/userapi:test
