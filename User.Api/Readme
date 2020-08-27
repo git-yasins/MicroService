@@ -226,4 +226,4 @@ docker run -d -v /srv/gitlab/images/registry:/var/lib/registry \
 curl http://10.211.55.5:5000/v2/_catalog
 
 #打 TAG
-docker tag userapi:test 10.211.55:5000/userapi:test
+docker tag userapi:test 10.211.55.5:5000/userapi:test

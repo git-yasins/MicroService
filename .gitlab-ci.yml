@@ -21,9 +21,9 @@ job3:
     - cd User.Api
     - docker build -t userapi:test .
     #- docker login -u yasin2020 -p yasin20182018 https://hub.docker.com/
-    - docker tag userapi:test 10.211.55:5000/userapi:test
-    - docker push 10.211.55:5000/userapi:test
+    - docker tag userapi:test 10.211.55.5:5000/userapi:test
+    - docker push 10.211.55.5:5000/userapi:test
 job4:
   stage: deploy
   script:
-    - docker run -d -p 8002:80 --link mysql01:db --name userapi 10.211.55:5000/userapi:test
+    - docker run -d -p 8002:80 --link mysql01:db --name userapi 10.211.55.5:5000/userapi:test
