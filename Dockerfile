@@ -5,7 +5,7 @@ EXPOSE 8001
 #用于编译的SDK镜像
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["User.API.csproj", "/"]
+COPY ["/User.API.csproj", "/"]
 RUN dotnet restore "/User.API.csproj"
 COPY . .
 WORKDIR "/src"
