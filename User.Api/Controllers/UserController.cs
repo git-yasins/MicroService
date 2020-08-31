@@ -106,5 +106,14 @@ namespace User.API.Controllers {
             var options = HttpContext.RequestServices.GetRequiredService<IOptions<ApiBehaviorOptions>> ();
             return (ActionResult) options.Value.InvalidModelStateResponseFactory (ControllerContext);
         }
+
+        [Route ("check-or-create")]
+        [HttpPost]
+        public async Task<IActionResult> CheckOrCreate (string phone) {
+            if (!await _userContext.Users.AnyAsync (u => u.Phone == phone)) {
+                _userContext.Users.Add (new AppUser { Phone = phone });
+            }
+            return Ok ();
+        }
     }
 }
