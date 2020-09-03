@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "L3DwuS7w2ZOJ9CpnrrpuQRvnQC90y5W9OPPjqJ5mb0O5LWO1NY41SYaGXv9PSJyqtHf2F1voFjchL1TN2nWzQQ==",
+  "dgSpecHash": "uh+9g+Oulid7OCnegEx3XAf3tTh5hODcBKpTRQAUcxkgZRxi4PeVMue+jzSpux5qG+42GltM8v7biihw3eXrFw==",
   "success": true,
   "projectFilePath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/User.Api.UnitTest.csproj",
   "expectedPackageFiles": [
     "/Users/tangyaoxiang/.nuget/packages/castle.core/4.4.0/castle.core.4.4.0.nupkg.sha512",
+    "/Users/tangyaoxiang/.nuget/packages/consul/1.6.1.1/consul.1.6.1.1.nupkg.sha512",
     "/Users/tangyaoxiang/.nuget/packages/coverlet.collector/1.2.0/coverlet.collector.1.2.0.nupkg.sha512",
     "/Users/tangyaoxiang/.nuget/packages/fluentassertions/5.10.3/fluentassertions.5.10.3.nupkg.sha512",
     "/Users/tangyaoxiang/.nuget/packages/microsoft.aspnetcore.jsonpatch/3.1.6/microsoft.aspnetcore.jsonpatch.3.1.6.nupkg.sha512",

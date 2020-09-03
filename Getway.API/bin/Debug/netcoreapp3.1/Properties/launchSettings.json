@@ -1,0 +1,12 @@
+﻿{
+    "profiles": {
+        "API.Getway": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "applicationUrl": "https://localhost",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
+    }
+}

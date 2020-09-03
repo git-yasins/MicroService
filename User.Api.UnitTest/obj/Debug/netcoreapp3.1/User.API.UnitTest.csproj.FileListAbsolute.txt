@@ -268,3 +268,4 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API.UnitTest/bin/Debug/netcoreapp3.1/runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API.UnitTest/bin/Debug/netcoreapp3.1/User.API.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API.UnitTest/bin/Debug/netcoreapp3.1/User.API.pdb
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Consul.dll

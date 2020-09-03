@@ -1,19 +1,23 @@
 using System;
-using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
+using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
+using User.Api.Dtos;
 using User.API.Data;
-using User.API.Filters;
+
 namespace User.API {
     public class Startup {
         public Startup (IConfiguration configuration) {
@@ -27,9 +31,19 @@ namespace User.API {
             services.AddDbContext<UserContext> (options => {
                 options.UseMySql (Configuration.GetConnectionString ("MySqlUser"));
             });
-  
+
+            //获取Consul配置,映射为ServiceDisvoveryOptions对象
+            services.Configure<ServiceDiscoveryOptions> (Configuration.GetSection ("ServiceDiscovery"));
+
+            services.AddSingleton<IConsulClient> (provider => new ConsulClient (cfg => {
+                var serviceConfiguration = provider.GetRequiredService<IOptions<ServiceDiscoveryOptions>> ().Value;
+                if (!string.IsNullOrEmpty (serviceConfiguration.Consul.HttpEndpoint)) {
+                    cfg.Address = new Uri (serviceConfiguration.Consul.HttpEndpoint);
+                }
+            }));
+
             services.AddControllers (
-                //options => options.Filters.Add (typeof (GlobalExceptionFilter))
+                    //options => options.Filters.Add (typeof (GlobalExceptionFilter))
                 )
                 .AddNewtonsoftJson (setup => { //添加[patch]局部更新JSON序列化  JsonPatchDocument 支持
                     //串行化设置
@@ -54,10 +68,22 @@ namespace User.API {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
+        public void Configure (IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
             }
+
+            #region Consul    
+            //启动时注册Consul服务
+            hostApplicationLifetime.ApplicationStarted.Register (() => {
+                RegisterService (app, serviceOptions, consulClient);
+            });
+
+            //停止时移除Consul服务
+            hostApplicationLifetime.ApplicationStopped.Register (() => {
+                DeRegisterService (app, serviceOptions, consulClient);
+            });
+            #endregion
 
             app.UseHttpsRedirection ();
 
@@ -68,6 +94,47 @@ namespace User.API {
             app.UseEndpoints (endpoints => {
                 endpoints.MapControllers ();
             });
+        }
+
+        /// <summary>
+        /// 注册Consul服务发现
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="serviceOptions"></param>
+        private void RegisterService (IApplicationBuilder app, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature> ().Addresses.Select (p => new Uri (p));
+
+            foreach (var address in addresses) {
+                var serviceId = $"{serviceOptions.Value.ServiceName}_{address.Host}:{address.Port}";
+
+                var httpCheck = new AgentServiceCheck {
+                    DeregisterCriticalServiceAfter = TimeSpan.FromMinutes (1),
+                    Interval = TimeSpan.FromSeconds (30),
+                    HTTP = new Uri (address, "HealthCheck").OriginalString //HealthCheck Controller Name 健康检查
+                };
+
+                var registration = new AgentServiceRegistration {
+                    Checks = new [] { httpCheck },
+                    Address = address.Host,
+                    ID = serviceId,
+                    Name = serviceOptions.Value.ServiceName,
+                    Port = address.Port
+                };
+
+                consulClient.Agent.ServiceRegister (registration).GetAwaiter ().GetResult ();
+            }
+        }
+
+        //停止Consul服务
+        private void DeRegisterService (IApplicationBuilder app, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature> ().Addresses.Select (p => new Uri (p));
+
+            foreach (var address in addresses) {
+                var serviceId = $"{serviceOptions.Value.ServiceName}_{address.Host}:{address.Port}";
+                consulClient.Agent.ServiceDeregister (serviceId).GetAwaiter ().GetResult ();
+            }
         }
     }
 }

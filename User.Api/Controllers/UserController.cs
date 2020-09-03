@@ -110,10 +110,13 @@ namespace User.API.Controllers {
         [Route ("check-or-create")]
         [HttpPost]
         public async Task<IActionResult> CheckOrCreate (string phone) {
-            if (!await _userContext.Users.AnyAsync (u => u.Phone == phone)) {
-                _userContext.Users.Add (new AppUser { Phone = phone });
+            var user = await _userContext.Users.SingleOrDefaultAsync (x => x.Phone == phone);
+            if (user == null) {
+                user = new AppUser { Phone = phone };
+                _userContext.Users.Add (user);
+                _userContext.SaveChanges();
             }
-            return Ok ();
+            return Ok (user.Id);
         }
     }
 }

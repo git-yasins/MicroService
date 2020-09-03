@@ -44,6 +44,17 @@
           }
         }
       },
+      "Consul/1.6.1.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Consul.dll": {
+            "assemblyVersion": "1.6.1.1",
+            "fileVersion": "1.6.1.1"
+          }
+        }
+      },
       "coverlet.collector/1.2.0": {},
       "FluentAssertions/5.10.3": {
         "dependencies": {
@@ -1468,6 +1479,7 @@
       },
       "User.Api/1.0.0": {
         "dependencies": {
+          "Consul": "1.6.1.1",
           "Microsoft.AspNetCore.JsonPatch": "3.1.6",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.1.6",
           "Microsoft.EntityFrameworkCore.Tools": "3.1.6",
@@ -1491,6 +1503,13 @@
       "sha512": "sha512-b5rRL5zeaau1y/5hIbI+6mGw3cwun16YjkHZnV9RRT5UyUIFsgLmNXJ0YnIN9p8Hw7K7AbG1q1UclQVU3DinAQ==",
       "path": "castle.core/4.4.0",
       "hashPath": "castle.core.4.4.0.nupkg.sha512"
+    },
+    "Consul/1.6.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AJkBiix1bT3cSZRO6OD0Ee31Co1qgVkmVBFwpxym9WdxH5K6LfmAZ8Vb8nGvo9EKC+ir2sv5fKIrY75aENcMDA==",
+      "path": "consul/1.6.1.1",
+      "hashPath": "consul.1.6.1.1.nupkg.sha512"
     },
     "coverlet.collector/1.2.0": {
       "type": "package",
