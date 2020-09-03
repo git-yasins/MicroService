@@ -7,7 +7,20 @@
             "Port": 8002
         }],
         "UpstreamPathTemplate": "/users",
-        "UpstreamHttpMethod": ["Get"]
+        "UpstreamHttpMethod": ["Get"],
+        "AuthenticationOptions": {
+            "AuthenticationProviderKey": "finbook",
+            "AllowedScopes": []
+        }
+    }, {
+        "DownstreamPathTemplate": "/connect/token",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [{
+            "Host": "localhost",
+            "Port": 8003
+        }],
+        "UpstreamPathTemplate": "/connect/token",
+        "UpstreamHttpMethod": ["Post"]
     }],
     "GlobalConfiguration": {
         "BaseUrl": "http://localhost"

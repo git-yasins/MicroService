@@ -135,3 +135,4 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API/obj/Debug/netcoreapp3.1/User.API.genruntimeconfig.cache
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API/bin/Debug/netcoreapp3.1/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API/bin/Debug/netcoreapp3.1/Newtonsoft.Json.Bson.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/Consul.dll

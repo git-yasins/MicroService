@@ -26,7 +26,6 @@ namespace API.Getway {
                     options.ApiSecret = "secret";
                     options.RequireHttpsMetadata = false;
                 });
-
             services.AddOcelot ();
         }
 

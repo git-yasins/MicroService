@@ -31,11 +31,8 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/IdentityModel.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/IdentityModel.AspNetCore.OAuth2Introspection.dll
-/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/IdentityServer4.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/IdentityServer4.AccessTokenValidation.dll
-/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/IdentityServer4.Storage.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/Microsoft.AspNetCore.Authentication.JwtBearer.dll
-/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.JsonWebTokens.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Logging.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Getway.API/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Protocols.dll
