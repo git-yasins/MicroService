@@ -23,18 +23,20 @@ namespace User.Identity.Authentication {
                 context.Result = errorValidationResult;
             }
 
-            // 检查难码
-            if (!_authCodeService.Validate (phone, code)) {
+            // 检查状态码
+            if (! _authCodeService.Validate (phone, code)) {
                 context.Result = errorValidationResult;
                 return;
             }
 
             // 完成用户注册
-            var userId = _userService.CheckOrCreate (phone);
+            var userId = await _userService.CheckOrCreate (phone);
             if (userId <= 0) {
                 context.Result = errorValidationResult;
                 return;
             }
+
+            context.Result = new GrantValidationResult (userId.ToString (), GrantType);
         }
     }
 }
