@@ -8,6 +8,7 @@ using DnsClient;
 using IdentityServerCenter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +16,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Resilience;
 using User.Identity.Dtos;
+using User.Identity.Infrastructure;
 using User.Identity.Services;
 namespace User.Identity {
     public class Startup {
@@ -42,9 +45,19 @@ namespace User.Identity {
                 return new LookupClient (serviceConfiguration.Consul.DnsEndpoint.ToIPEndPoint ()); //IPAddress.Parse("127.0.0.1"), 8600
             });
 
-            //配置Ide
-            services.AddSingleton (new HttpClient ());
+            //注册全局单例 重试融断工厂
+            services.AddSingleton (typeof (ResilienceClientFactory), sp => {
+                var logger = sp.GetRequiredService<ILogger<ResilienceHttpClient>> ();
+                var httpContextAccesser = sp.GetRequiredService<IHttpContextAccessor> ();
+                var retryCount = 5;
+                var exceptionCountAllowedBeforeBreaking = 5;
+                return new ResilienceClientFactory (logger, httpContextAccesser, retryCount, exceptionCountAllowedBeforeBreaking);
+            });
 
+            //注册全局单例IHttpClient
+            services.AddSingleton<IHttpClient> (sp => {
+                return sp.GetRequiredService<ResilienceClientFactory> ().GetResilienceHttpClient();
+            });
             services.AddScoped<IUserService, UserService> ();
             services.AddScoped<IAuthCodeService, AuthCodeService> ();
 

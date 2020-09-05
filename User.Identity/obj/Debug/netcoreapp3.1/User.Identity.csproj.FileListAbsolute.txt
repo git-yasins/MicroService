@@ -30,3 +30,7 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/obj/Debug/netcoreapp3.1/User.Identity.pdb
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/obj/Debug/netcoreapp3.1/User.Identity.genruntimeconfig.cache
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/DnsClient.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Polly.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Resilience.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Resilience.pdb

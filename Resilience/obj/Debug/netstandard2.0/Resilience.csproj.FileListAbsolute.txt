@@ -1,0 +1,9 @@
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/Debug/netstandard2.0/Resilience.csprojAssemblyReference.cache
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/Debug/netstandard2.0/Resilience.AssemblyInfoInputs.cache
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/Debug/netstandard2.0/Resilience.AssemblyInfo.cs
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/Debug/netstandard2.0/Resilience.csproj.CoreCompileInputs.cache
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/bin/Debug/netstandard2.0/Resilience.deps.json
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/bin/Debug/netstandard2.0/Resilience.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/bin/Debug/netstandard2.0/Resilience.pdb
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/Debug/netstandard2.0/Resilience.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/Debug/netstandard2.0/Resilience.pdb

@@ -7,6 +7,12 @@
   <ItemGroup>
     <PackageReference Include="DnsClient" Version="1.3.2" />
     <PackageReference Include="IdentityServer4" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.7" />
+    <PackageReference Include="Polly" Version="5.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Resilience\Resilience.csproj" />
   </ItemGroup>
 
 

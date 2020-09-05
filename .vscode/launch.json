@@ -4,14 +4,16 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/User.Identity/bin/Debug/netcoreapp3.1/User.Identity.dll",
+            //"program": "${workspaceFolder}/User.Identity/bin/Debug/netcoreapp3.1/User.Identity.dll",
+            "program": "${workspaceFolder}/User.Api/bin/Debug/netcoreapp3.1/User.Api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/User.Identity",
+            "cwd": "${workspaceFolder}/User.Api",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

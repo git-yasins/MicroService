@@ -10,8 +10,8 @@ namespace User.Identity.Authentication {
         private readonly IUserService _userService;
 
         public SmsAuthCodeValidator (IAuthCodeService authCodeService, IUserService userService) {
-            _authCodeService = authCodeService??throw new ArgumentNullException (nameof (authCodeService));
-            _userService = userService??throw new ArgumentNullException (nameof (userService));
+            _authCodeService = authCodeService;
+            _userService = userService;
         }
 
         public async Task ValidateAsync (ExtensionGrantValidationContext context) {
