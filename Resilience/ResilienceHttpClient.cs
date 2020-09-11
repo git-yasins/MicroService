@@ -2,8 +2,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +42,21 @@ namespace Resilience {
             return DoPostPutAsync (HttpMethod.Post, url, func, authorizationToken, requestId, authorizationMethod);
         }
 
+        public Task<HttpResponseMessage> PutAsync<T> (string uri, T item, string authorizationToken = null, string requestId = null, string authorizationMethod = "Bearer") {
+            Func<HttpRequestMessage> func = () => { return new HttpRequestMessage (HttpMethod.Post, uri) { Content = new StringContent (JsonConvert.SerializeObject (item), Encoding.UTF8, "application/json") }; };
+            return DoPostPutAsync (HttpMethod.Put, uri, func, authorizationToken, requestId, authorizationMethod);
+        }
+
+        /// <summary>
+        /// 公共POST|PUT执行方法
+        /// </summary>
+        /// <param name="method">post|put</param>
+        /// <param name="url">api路径</param>
+        /// <param name="requestMessageAction">请求对象 添加jwt Token Authorization Headers</param>
+        /// <param name="authorizationToken">请求TOKEN</param>
+        /// <param name="requestId">x-requestid</param>
+        /// <param name="authorizationMethod">Bearer方式</param>
+        /// <returns>响应数据</returns>
         private Task<HttpResponseMessage> DoPostPutAsync (
             HttpMethod method,
             string url,
@@ -99,6 +116,36 @@ namespace Resilience {
             var url = new Uri (uri);
             var origin = $"{url.Scheme}://{url.DnsSafeHost}:{url.Port}";
             return origin;
+        }
+        /// <summary>
+        /// 向指定API URI添加验证头指定请求方式,返回请求结果
+        /// </summary>
+        /// <param name="uri">请头API地址</param>
+        /// <param name="authorizationToken">验证TOKEN</param>
+        /// <param name="authorizationMethod">请求方式GET</param>
+        /// <returns></returns>
+        public Task<string> GetStringAsync (string uri, string authorizationToken = null, string authorizationMethod = "Bearer") {
+            var origin = GetOriginFromUri (uri);
+            return HttpInvoker (origin, async () => {
+                var requestMessage = new HttpRequestMessage (HttpMethod.Get, uri);
+
+                SetAuthorizationHeader (requestMessage);
+                if (authorizationToken != null) {
+                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue (authorizationMethod, authorizationToken);
+                }
+
+                var response = await _httpClient.SendAsync (requestMessage);
+
+                if (response.StatusCode == HttpStatusCode.InternalServerError) {
+                    throw new HttpRequestException ();
+                }
+
+                if (!response.IsSuccessStatusCode) {
+                    return null;
+                }
+
+                return await response.Content.ReadAsStringAsync ();
+            });
         }
     }
 }

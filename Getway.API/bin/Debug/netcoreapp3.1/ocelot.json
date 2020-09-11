@@ -1,27 +1,108 @@
 {
     "Routes": [{
-        "DownstreamPathTemplate": "/api/users",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [{
-            "Host": "localhost",
-            "Port": 8002
-        }],
-        "UpstreamPathTemplate": "/users",
-        "UpstreamHttpMethod": ["Get"],
-        "AuthenticationOptions": {
-            "AuthenticationProviderKey": "finbook",
-            "AllowedScopes": []
+            "DownstreamPathTemplate": "/api/users",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8002
+            }],
+            "UpstreamPathTemplate": "/users",
+            "UpstreamHttpMethod": ["Get", "Patch"],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "finbook",
+                "AllowedScopes": ["user_api"]
+            }
+        }, {
+            "DownstreamPathTemplate": "/api/users/baseinfo/{userId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8002
+            }],
+            "UpstreamPathTemplate": "/users/baseinfo/{userId}",
+            "UpstreamHttpMethod": ["Get"],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "finbook",
+                "AllowedScopes": ["user_api"]
+            }
+        }, {
+            "DownstreamPathTemplate": "/connect/token",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8003
+            }],
+            "UpstreamPathTemplate": "/connect/token",
+            "UpstreamHttpMethod": ["Post"]
+        }, {
+            "DownstreamPathTemplate": "/.well-know/{catchAll}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8003
+            }],
+            "UpstreamPathTemplate": "/.well-know/{catchAll}}",
+            "UpstreamHttpMethod": ["Get"]
+        }, {
+            "DownstreamPathTemplate": "/connect/{catchAll}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8003
+            }],
+            "UpstreamPathTemplate": "/connect/{catchAll}}",
+            "UpstreamHttpMethod": ["Post"]
+        }, {
+            "DownstreamPathTemplate": "/api/contacts",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8004
+            }],
+            "UpstreamPathTemplate": "/contacts",
+            "UpstreamHttpMethod": ["Get"],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "finbook",
+                "AllowedScopes": ["contact_api"]
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/api/contacts/tags",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8004
+            }],
+            "UpstreamPathTemplate": "/contacts/tag",
+            "UpstreamHttpMethod": ["Put"]
+        }, {
+            "DownstreamPathTemplate": "/api/contacts/apply-requests/{userId}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8004
+            }],
+            "UpstreamPathTemplate": "/contacts/apply-requests/{userId}",
+            "UpstreamHttpMethod": ["Put", "Post"],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "finbook",
+                "AllowedScopes": ["contact_api"]
+            }
+        }, {
+            "DownstreamPathTemplate": "/api/contacts/apply-requests",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8004
+            }],
+            "UpstreamPathTemplate": "/contacts/apply-requests",
+            "UpstreamHttpMethod": ["Get"],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "finbook",
+                "AllowedScopes": ["contact_api"]
+            }
         }
-    }, {
-        "DownstreamPathTemplate": "/connect/token",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [{
-            "Host": "localhost",
-            "Port": 8003
-        }],
-        "UpstreamPathTemplate": "/connect/token",
-        "UpstreamHttpMethod": ["Post"]
-    }],
+    ],
     "GlobalConfiguration": {
         "BaseUrl": "http://localhost"
     }

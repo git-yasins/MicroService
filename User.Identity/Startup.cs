@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DnsClient;
+using IdentityServer4.Services;
 using IdentityServerCenter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Resilience;
+using User.Identity.Authentication;
 using User.Identity.Dtos;
 using User.Identity.Infrastructure;
 using User.Identity.Services;
@@ -56,11 +58,12 @@ namespace User.Identity {
 
             //注册全局单例IHttpClient
             services.AddSingleton<IHttpClient> (sp => {
-                return sp.GetRequiredService<ResilienceClientFactory> ().GetResilienceHttpClient();
+                return sp.GetRequiredService<ResilienceClientFactory> ().GetResilienceHttpClient ();
             });
             services.AddScoped<IUserService, UserService> ();
             services.AddScoped<IAuthCodeService, AuthCodeService> ();
-
+            //用户配置Claims注册
+            services.AddTransient<IProfileService, ProfileService> ();
             services.AddControllers ();
         }
 

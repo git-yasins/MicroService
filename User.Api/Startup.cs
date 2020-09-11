@@ -1,8 +1,10 @@
 using System;
 using System.Data.Common;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using Consul;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -42,6 +44,14 @@ namespace User.API {
                 }
             }));
 
+             //注册JWT验证
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear ();
+            services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme).AddJwtBearer (Options => {
+                Options.RequireHttpsMetadata = false;
+                Options.Audience = "user_api";
+                Options.Authority = "http://localhost:8003";
+            });
+
             services.AddControllers (
                     //options => options.Filters.Add (typeof (GlobalExceptionFilter))
                 )
@@ -72,6 +82,8 @@ namespace User.API {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
             }
+
+            app.UseAuthentication();
 
             #region Consul    
             //启动时注册Consul服务

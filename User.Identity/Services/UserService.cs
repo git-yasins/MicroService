@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using DnsClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Resilience;
+using User.Identity.Dto;
 using User.Identity.Dtos;
 
 namespace User.Identity.Services {
@@ -28,21 +30,23 @@ namespace User.Identity.Services {
             _userServiceUrl = $"http://{host}:{port}";
         }
 
-        public async Task<int> CheckOrCreate (string phone) {
+        public async Task<UserInfo> CheckOrCreate (string phone) {
             var form = new Dictionary<string, string> { { "phone", phone } };
             var content = new FormUrlEncodedContent (form);
             try {
                 var response = await httpClient.PostAsync (_userServiceUrl + "/api/users/check-or-create", form);
                 if (response.StatusCode == HttpStatusCode.OK) {
-                    var userId = await response.Content.ReadAsStringAsync ();
-                    int.TryParse (userId, out int intUserId);
-                    return intUserId;
+                    var result = await response.Content.ReadAsStringAsync ();
+                    UserInfo userInfo = JsonConvert.DeserializeObject<UserInfo> (result);
+
+                    _logger.LogTrace ($"Completed CheckOrCreate with userId:{userInfo.Id}");
+                    return userInfo;
                 }
             } catch (Exception ex) {
                 _logger.LogError ("CheckOrCreate 在重试之后失败," + ex.Message + ex.StackTrace);
                 throw ex;
             }
-            return 0;
+            return null;
         }
     }
 }

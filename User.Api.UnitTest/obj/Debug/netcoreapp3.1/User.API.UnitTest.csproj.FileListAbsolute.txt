@@ -269,3 +269,13 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API.UnitTest/bin/Debug/netcoreapp3.1/User.API.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.API.UnitTest/bin/Debug/netcoreapp3.1/User.API.pdb
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Consul.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/IdentityModel.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/IdentityModel.AspNetCore.OAuth2Introspection.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/IdentityServer4.AccessTokenValidation.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Logging.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Protocols.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Tokens.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api.UnitTest/bin/Debug/netcoreapp3.1/System.IdentityModel.Tokens.Jwt.dll

@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
@@ -24,19 +25,27 @@ namespace User.Identity.Authentication {
             }
 
             // 检查状态码
-            if (! _authCodeService.Validate (phone, code)) {
+            if (!_authCodeService.Validate (phone, code)) {
                 context.Result = errorValidationResult;
                 return;
             }
 
             // 完成用户注册
-            var userId = await _userService.CheckOrCreate (phone);
-            if (userId <= 0) {
+            var userInfo = await _userService.CheckOrCreate (phone);
+            if (userInfo == null) {
                 context.Result = errorValidationResult;
                 return;
             }
 
-            context.Result = new GrantValidationResult (userId.ToString (), GrantType);
+            //新增claims,将User.Api的Claims 传送给Contact.API
+            var claims = new Claim[] {
+                new Claim ("name", userInfo.Name ?? string.Empty),
+                new Claim ("title", userInfo.Title ?? string.Empty),
+                new Claim ("avatar", userInfo.Avatar ?? string.Empty),
+                new Claim ("company", userInfo.Company ?? string.Empty),
+            };
+
+            context.Result = new GrantValidationResult (userInfo.Id.ToString (), GrantType, claims);
         }
     }
 }

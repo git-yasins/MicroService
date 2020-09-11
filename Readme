@@ -79,7 +79,7 @@ https://www.cnblogs.com/l-hh/p/11213506.html
 #mysql
 docker run -d -p 3306:3306 --name mysql01 -v=/srv/mysql/config:/etc -v=/srv/mysql/data:/var/lib/mysql mysql/mysql-server
 #mongodb
-docker run -d -p 27017:27017 --name mongo01 -v=/document/docker/mongo/config:/data/configdb -v=/document/docker/mongo/db:/data/db mongo
+docker run -d -p 27017:27017 --name mongo01 -v=/srv/mongo/config:/data/configdb -v=/srv/mongo/db:/data/db mongo
 vi my.cnf
 [sqld]
 user=mysql

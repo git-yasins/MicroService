@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -114,9 +117,70 @@ namespace User.API.Controllers {
             if (user == null) {
                 user = new AppUser { Phone = phone };
                 _userContext.Users.Add (user);
-                _userContext.SaveChanges();
+                await _userContext.SaveChangesAsync ();
             }
-            return Ok (user.Id);
+
+            return Ok (new { user.Id, user.Name, user.Company, user.Title, user.Avatar });
+        }
+        /// <summary>
+        /// 获取用户标签
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route ("tags")]
+        public async Task<IActionResult> GetUserTags () {
+            return Ok (await _userContext.UserTags.Where (u => u.UserId == UserIdentity.UserId).ToListAsync ());
+        }
+        /// <summary>
+        /// 根据用户手机查找用户资料
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route ("search")]
+        public async Task<IActionResult> Search (string phone) {
+            return Ok (await _userContext.Users.Include (u => u.Properties).SingleOrDefaultAsync (u => u.Id == UserIdentity.UserId && u.Phone == phone));
+        }
+        /// <summary>
+        /// 更新用户标签
+        /// </summary>
+        /// <param name="tags">用户标签列表</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route ("tags")]
+        public async Task<IActionResult> UpdateUserTags ([FromBody] List<string> tags) {
+            var originTags = await _userContext.UserTags.Where (x => x.UserId == UserIdentity.UserId).ToListAsync ();
+            var newTags = tags.Except (originTags.Select (c => c.Tag));
+
+            await _userContext.UserTags.AddRangeAsync (
+                newTags.Select (t => new Models.UserTag {
+                    CreateTime = DateTime.Now,
+                        UserId = UserIdentity.UserId,
+                        Tag = t
+                })
+            );
+
+            await _userContext.SaveChangesAsync ();
+            return Ok ();
+        }
+
+        [HttpGet]
+        [Route ("baseinfo/{userId}")]
+        public async Task<IActionResult> GetBaseInfo (int userId) {
+            //检查用户是否好友关系
+
+            var user = await _userContext.Users.SingleOrDefaultAsync (u => u.Id == userId);
+            if (user == null) {
+                return NotFound ();
+            }
+
+            return Ok (new {
+                userId = user.Id,
+                    user.Name,
+                    user.Company,
+                    user.Title,
+                    user.Avatar
+            });
         }
     }
 }
