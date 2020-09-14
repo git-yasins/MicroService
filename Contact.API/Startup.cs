@@ -2,8 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using Contact.API.Data;
 using Contact.API.Dtos;
 using Contact.API.Infrastructure;
+using Contact.API.IntegrationEvents;
 using Contact.API.Service;
 using DnsClient;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,10 +43,9 @@ namespace Contact.API {
             services.AddSingleton<ContactContext> ()
                 .AddScoped<IContactApplyRequestRepository, MongoContactApplyRequestRepository> ()
                 .AddScoped<IContactRepository, MongoContactRepository> ()
-                .AddScoped<IUserService, UserService> ();
+                .AddScoped<IUserService, UserService> ()
+                .AddScoped<UserProfileChangedEventHandler> (); //注册CAP RabbitMQ 消息订阅
 
-            //获取Consul配置,映射为ServiceDisvoveryOptions对象
-            services.Configure<ServiceDiscoveryOptions> (Configuration.GetSection ("ServiceDiscovery"));
             services.AddSingleton<IDnsQuery> (p => {
                 var serviceConfiguration = p.GetRequiredService<IOptions<ServiceDiscoveryOptions>> ().Value;
                 return new LookupClient (serviceConfiguration.Consul.DnsEndpoint.ToIPEndPoint ()); //IPAddress.Parse("127.0.0.1"), 8600
@@ -66,6 +67,27 @@ namespace Contact.API {
             });
 
             services.AddControllers ();
+
+            //CAP
+            services.AddCap (options => {
+                options.UseMySql (Configuration.GetConnectionString ("MySqlUser"))
+                    .UseRabbitMQ (mq => { //发布|订阅 rabbitMQ主机地址
+                        mq.HostName = "10.211.55.5";
+                        mq.UserName = "admin";
+                        mq.Password = "admin";
+                    })
+                    .UseDashboard (); //Cap的可视化管理界面；默认地址:http://localhost:端口/cap
+
+                //注册Consul
+                options.UseDiscovery (d => {
+                    d.DiscoveryServerHostName = "localhost";
+                    d.DiscoveryServerPort = 8500;
+                    d.CurrentNodeHostName = "localhost";
+                    d.CurrentNodePort = 5801;
+                    d.NodeId = "2";
+                    d.NodeName = "CAP No.2 Node";
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

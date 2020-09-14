@@ -64,6 +64,7 @@ namespace User.Identity {
             services.AddScoped<IAuthCodeService, AuthCodeService> ();
             //用户配置Claims注册
             services.AddTransient<IProfileService, ProfileService> ();
+
             services.AddControllers ();
         }
 

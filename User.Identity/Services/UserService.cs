@@ -34,6 +34,7 @@ namespace User.Identity.Services {
             var form = new Dictionary<string, string> { { "phone", phone } };
             var content = new FormUrlEncodedContent (form);
             try {
+                
                 var response = await httpClient.PostAsync (_userServiceUrl + "/api/users/check-or-create", form);
                 if (response.StatusCode == HttpStatusCode.OK) {
                     var result = await response.Content.ReadAsStringAsync ();

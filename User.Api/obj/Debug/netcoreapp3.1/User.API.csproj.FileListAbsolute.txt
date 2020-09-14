@@ -146,3 +146,10 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/Microsoft.IdentityModel.Tokens.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/System.IdentityModel.Tokens.Jwt.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/DotNetCore.CAP.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/DotNetCore.CAP.Dashboard.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/DotNetCore.CAP.MySql.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/DotNetCore.CAP.RabbitMQ.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/RabbitMQ.Client.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/zh/DotNetCore.CAP.Dashboard.resources.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/bin/Debug/netcoreapp3.1/Dapper.dll

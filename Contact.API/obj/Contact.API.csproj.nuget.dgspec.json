@@ -44,6 +44,22 @@
               "target": "Package",
               "version": "[1.3.2, )"
             },
+            "DotNetCore.CAP": {
+              "target": "Package",
+              "version": "[3.0.4, )"
+            },
+            "DotNetCore.CAP.Dashboard": {
+              "target": "Package",
+              "version": "[3.0.4, )"
+            },
+            "DotNetCore.CAP.MySql": {
+              "target": "Package",
+              "version": "[3.0.4, )"
+            },
+            "DotNetCore.CAP.RabbitMQ": {
+              "target": "Package",
+              "version": "[3.0.4, )"
+            },
             "IdentityServer4.AccessTokenValidation": {
               "target": "Package",
               "version": "[3.0.1, )"

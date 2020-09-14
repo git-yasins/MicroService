@@ -1,9 +1,9 @@
 using System;
-using System.Data.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net;
+using System.Text.RegularExpressions;
 using Consul;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,13 +30,17 @@ namespace User.API {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services) {
-            services.AddDbContext<UserContext> (options => {
-                options.UseMySql (Configuration.GetConnectionString ("MySqlUser"));
-            });
+
+            services.AddDbContext<UserContext> (
+                options => {
+                    options.UseMySql (Configuration.GetConnectionString ("MySqlUser"));
+                }
+            );
 
             //获取Consul配置,映射为ServiceDisvoveryOptions对象
             services.Configure<ServiceDiscoveryOptions> (Configuration.GetSection ("ServiceDiscovery"));
 
+            //注册Consul客户端
             services.AddSingleton<IConsulClient> (provider => new ConsulClient (cfg => {
                 var serviceConfiguration = provider.GetRequiredService<IOptions<ServiceDiscoveryOptions>> ().Value;
                 if (!string.IsNullOrEmpty (serviceConfiguration.Consul.HttpEndpoint)) {
@@ -44,8 +48,9 @@ namespace User.API {
                 }
             }));
 
-             //注册JWT验证
+            //注册JWT验证
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear ();
+
             services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme).AddJwtBearer (Options => {
                 Options.RequireHttpsMetadata = false;
                 Options.Audience = "user_api";
@@ -75,6 +80,28 @@ namespace User.API {
                     };
                 });
 
+            //CAP
+            services.AddCap (options => {
+                options
+                    .UseMySql (Configuration.GetConnectionString ("MySqlUser"))
+                    .UseRabbitMQ (mq => { //发布|订阅 rabbitMQ主机地址
+                        mq.HostName = "10.211.55.5";
+                        mq.UserName = "admin";
+                        mq.Password = "admin";
+                    })
+                    .UseDashboard (); //Cap的可视化管理界面；默认地址:http://localhost:8002/cap
+
+                //注册Consul
+                options.UseDiscovery (d => {
+                    d.DiscoveryServerHostName = "localhost";
+                    d.DiscoveryServerPort = 8500;
+                    d.CurrentNodeHostName = "localhost";
+                    d.CurrentNodePort = 5800;
+                    d.NodeId = "1";
+                    d.NodeName = "CAP No.1 Node";
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,8 +109,6 @@ namespace User.API {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
             }
-
-            app.UseAuthentication();
 
             #region Consul    
             //启动时注册Consul服务
@@ -96,6 +121,9 @@ namespace User.API {
                 DeRegisterService (app, serviceOptions, consulClient);
             });
             #endregion
+
+            //使用权限验证
+            app.UseAuthentication ();
 
             app.UseHttpsRedirection ();
 

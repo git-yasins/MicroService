@@ -1,8 +1,10 @@
+using System.Net;
+using System.Security.AccessControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using DotNetCore.CAP;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,16 +14,41 @@ using Microsoft.Extensions.Options;
 using User.API.Data;
 using User.API.Dtos;
 using User.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace User.API.Controllers {
     //[ApiController]
+    //[Authorize]
     [Route ("api/users")]
     public class UserController : BaseController {
         private UserContext _userContext;
         private ILogger<UserController> _logger;
-        public UserController (UserContext userContext, ILogger<UserController> logger) {
+        private readonly ICapPublisher _capPublisher;
+
+        public UserController (UserContext userContext, ILogger<UserController> logger, ICapPublisher capPublisher) {
             _userContext = userContext;
             _logger = logger;
+            _capPublisher = capPublisher;
+        }
+        /// <summary>
+        /// 发送用户变更消息
+        /// </summary>
+        /// <param name="appUser">用户数据</param>
+        private void RaiseUserProfileChangedEvent (AppUser user) {
+            //判断数据是否更改
+            if (_userContext.Entry (user).Property (nameof (user.Name)).IsModified ||
+                _userContext.Entry (user).Property (nameof (user.Title)).IsModified ||
+                _userContext.Entry (user).Property (nameof (user.Company)).IsModified ||
+                _userContext.Entry (user).Property (nameof (user.Avatar)).IsModified) {
+                //发布消息到rabbitMQ
+                _capPublisher.Publish ("finbook.user_api.user_profile_changed", new UserIdentity {
+                    UserId = user.Id,
+                        Name = user.Name,
+                        Title = user.Title,
+                        Avatar = user.Avatar,
+                        Company = user.Company
+                });
+            }
         }
 
         //[Route("")]
@@ -36,7 +63,11 @@ namespace User.API.Controllers {
             return Ok (user);
 
         }
-
+        /// <summary>
+        /// 更新用户信息
+        /// </summary>
+        /// <param name="patch">局部更新JsonPatchDocument</param>
+        /// <returns></returns>
         [Route ("")]
         [HttpPatch]
         public async Task<IActionResult> Path ([FromBody] JsonPatchDocument<AppUser> patch) {
@@ -67,9 +98,17 @@ namespace User.API.Controllers {
             foreach (var property in newProperties) {
                 _userContext.Add (property);
             }
-            _userContext.Users.Update (user);
-            _userContext.SaveChanges ();
-            System.Console.WriteLine (user.Name);
+
+            //处理事务
+            using (var transaction = _userContext.Database.BeginTransaction ()) {
+               //发布用户变更消息
+                RaiseUserProfileChangedEvent (user);
+              
+                _userContext.Users.Update (user);
+                _userContext.SaveChanges ();
+
+                transaction.Commit ();
+            }
             return Ok (user);
         }
 
@@ -182,5 +221,6 @@ namespace User.API.Controllers {
                     user.Avatar
             });
         }
+
     }
 }
