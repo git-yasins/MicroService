@@ -42,7 +42,7 @@ namespace User.API.UnitTest
             var context = GetUserContext ();
             var loggerMoq = new Mock<ILogger<UserController>> ();
             var logger = loggerMoq.Object;
-            return (controller: new UserController (context, logger), userContext : context);
+            return (controller: new UserController (context, logger,null), userContext : context);
         }
 
         [Fact]

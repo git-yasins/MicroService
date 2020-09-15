@@ -1,0 +1,11 @@
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/bin/Debug/netcoreapp3.1/Project.Domain.deps.json
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/bin/Debug/netcoreapp3.1/Project.Domain.runtimeconfig.json
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/bin/Debug/netcoreapp3.1/Project.Domain.runtimeconfig.dev.json
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/bin/Debug/netcoreapp3.1/Project.Domain.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/bin/Debug/netcoreapp3.1/Project.Domain.pdb
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/obj/Debug/netcoreapp3.1/Project.Domain.AssemblyInfoInputs.cache
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/obj/Debug/netcoreapp3.1/Project.Domain.AssemblyInfo.cs
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/obj/Debug/netcoreapp3.1/Project.Domain.csproj.CoreCompileInputs.cache
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/obj/Debug/netcoreapp3.1/Project.Domain.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/obj/Debug/netcoreapp3.1/Project.Domain.pdb
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.Domain/obj/Debug/netcoreapp3.1/Project.Domain.genruntimeconfig.cache
