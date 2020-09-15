@@ -1,11 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Project.Domain.Events;
 using Project.Domain.SeedWork;
 namespace Project.Domain.AggregatesModel {
     /// <summary>
     /// 项目
     /// </summary>
     public class Project : Entity, IAggregateRoot {
+        /// <summary>
+        /// 初始化项目的参与者与查看者
+        /// </summary>
+        public Project () {
+            this.Viewers = new List<ProjectViewer> ();
+            this.Contributors = new List<ProjectContributor> ();
+            //新增项目添加消息事件
+            this.AddDomainEvent (new ProjectCreatedEvent { Project = this });
+        }
+
         /// <summary>
         /// 用户ID
         /// </summary>
@@ -195,6 +207,37 @@ namespace Project.Domain.AggregatesModel {
             newProject.ReferenceId = source.ReferenceId == 0 ? source.Id : source.ReferenceId;
             newProject.UpdateTime = DateTime.Now;
             return newProject;
+        }
+
+        /// <summary>
+        /// 新增项目查看者消息事件
+        /// </summary>
+        /// <param name="userId">查看者ID</param>
+        /// <param name="userName">查看者名称</param>
+        /// <param name="avatar">查看者头像</param>
+        public void AddViewer (int userId, string userName, string avatar) {
+            var viewer = new ProjectViewer {
+                UserId = userId,
+                UserName = userName,
+                Avatar = avatar,
+                CreatedTime = DateTime.Now
+            };
+
+            if (!Viewers.Any (x => x.UserId == userId)) {
+                Viewers.Add (viewer);
+                AddDomainEvent (new ProjectViewedEvent { ProjectViewer = viewer });
+            }
+        }
+
+        /// <summary>
+        /// 增加项目参与者消息事件
+        /// </summary>
+        /// <param name="contributor">参与者</param>
+        public void AddContributor (ProjectContributor contributor) {
+            if (!Contributors.Any (x => x.UserId == UserId)) {
+                Contributors.Add (contributor);
+                 AddDomainEvent (new ProjectJoinedEvent { Contributor = contributor });
+            }
         }
     }
 }
