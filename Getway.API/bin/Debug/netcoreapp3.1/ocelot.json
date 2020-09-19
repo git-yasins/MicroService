@@ -101,6 +101,19 @@
                 "AuthenticationProviderKey": "finbook",
                 "AllowedScopes": ["contact_api"]
             }
+        }, {
+            "DownstreamPathTemplate": "/api/projects",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [{
+                "Host": "localhost",
+                "Port": 8005
+            }],
+            "UpstreamPathTemplate": "/projects",
+            "UpstreamHttpMethod": ["Get", "Post"],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "finbook",
+                "AllowedScopes": ["project_api"]
+            }
         }
     ],
     "GlobalConfiguration": {

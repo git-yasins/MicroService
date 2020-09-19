@@ -70,7 +70,7 @@ namespace Contact.API {
 
             //CAP
             services.AddCap (options => {
-                options.UseMySql (Configuration.GetConnectionString ("MySqlUser"))
+                options.UseMySql (Configuration.GetConnectionString ("MySqlContact"))
                     .UseRabbitMQ (mq => { //发布|订阅 rabbitMQ主机地址
                         mq.HostName = "10.211.55.5";
                         mq.UserName = "admin";

@@ -11,7 +11,8 @@ namespace IdentityServerCenter {
             return new List<ApiResource> {
                 new ApiResource ("getway_api", "getway service"),
                 new ApiResource ("user_api", "user service"),
-                new ApiResource ("contact_api", "contact service")
+                new ApiResource ("contact_api", "contact service"),
+                new ApiResource ("project_api", "project service")
             };
         }
 
@@ -33,6 +34,7 @@ namespace IdentityServerCenter {
                         "getway_api",
                         "contact_api",
                         "user_api",
+                        "project_api",
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile

@@ -37,12 +37,10 @@ namespace Project.Domain.AggregatesModel {
         /// <summary>
         /// 转换后的BP文件地址
         /// </summary>
-
         public string FormatBPFile { get; set; }
         /// <summary>
         /// 是否显示敏感信息
         /// </summary>
-
         public bool ShowSecurityInfo { get; set; }
         /// <summary>
         /// 公司所在省ID
@@ -146,7 +144,6 @@ namespace Project.Domain.AggregatesModel {
         /// </summary>
         /// <value></value>
         public DateTime CreateTime { get; private set; }
-
         public Project CloneProject (Project source = null) {
             if (source == null) {
                 source = this;
@@ -187,7 +184,6 @@ namespace Project.Domain.AggregatesModel {
             foreach (var item in source.Properties) {
                 newProject.Properties.Add (new ProjectProperty (item.Key, item.Text, item.Value));
             }
-
             return newProject;
         }
 

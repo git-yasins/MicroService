@@ -7,6 +7,7 @@ namespace Project.Domain.AggregatesModel
     /// </summary>
     public class ProjectViewer
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Avatar { get; set; }
