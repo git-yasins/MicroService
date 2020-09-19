@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using Consul;
+using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +19,6 @@ using Project.API.Applications.Queries;
 using Project.API.Applications.Service;
 using Project.API.Dto;
 using Project.Domain.AggregatesModel;
-using Project.Domain.SeedWork;
 using Project.Infrastructure;
 using Project.Infrastructure.Repositories;
 
@@ -32,44 +32,62 @@ namespace Project.API {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices (IServiceCollection services) {
-
+            var conneString = Configuration.GetConnectionString ("MySqlProject");
+            
             services.AddDbContext<ProjectContext> (options => {
-                options.UseMySql (Configuration.GetConnectionString ("MySqlProject"), mySql => {
-                    mySql.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                options.UseMySql (conneString, mySql => {
+                    mySql.MigrationsAssembly (typeof (Startup).GetTypeInfo ().Assembly.GetName ().Name);
                 });
-            });
-
-            services.AddMediatR (typeof (Startup));
-            //services.AddMediatR (typeof (Domain.AggregatesModel.Project).GetType().Assembly);
-
-            services.AddScoped<IRecommendService, RecommendService> ()
-                .AddScoped<IProjectRepository, ProjectRepository> (sp => {
-                    var projectContext = sp.GetRequiredService<ProjectContext> ();
-                    return new ProjectRepository (projectContext);
-                });
-
-            services.AddScoped<IProjectQueries, ProjectQueries> (sp => {
-                return new ProjectQueries (Configuration.GetConnectionString ("MySqlProject"));
             });
 
             //获取Consul配置,映射为ServiceDisvoveryOptions对象
             services.Configure<ServiceDiscoveryOptions> (Configuration.GetSection ("ServiceDiscovery"));
 
-            //注册Consul客户端
-            services.AddSingleton<IConsulClient> (provider => new ConsulClient (cfg => {
-                var serviceConfiguration = provider.GetRequiredService<IOptions<ServiceDiscoveryOptions>> ().Value;
-                if (!string.IsNullOrEmpty (serviceConfiguration.Consul.HttpEndpoint)) {
-                    cfg.Address = new Uri (serviceConfiguration.Consul.HttpEndpoint);
-                }
-            }));
+            services
+                .AddMediatR (typeof (Startup))
+                .AddScoped<IRecommendService, RecommendService> ()
+                .AddScoped<IProjectRepository, ProjectRepository> (sp => {
+                    var projectContext = sp.GetRequiredService<ProjectContext> ();
+                    return new ProjectRepository (projectContext);
+                })
+                .AddScoped<IProjectQueries, ProjectQueries> (sp => {
+                    return new ProjectQueries (conneString);
+                })
+                .AddSingleton<IConsulClient> (provider => new ConsulClient (cfg => {
+                    var serviceConfiguration = provider.GetRequiredService<IOptions<ServiceDiscoveryOptions>> ().Value;
+                    if (!string.IsNullOrEmpty (serviceConfiguration.Consul.HttpEndpoint)) {
+                        cfg.Address = new Uri (serviceConfiguration.Consul.HttpEndpoint);
+                    }
+                }));
 
             //注册JWT验证
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear ();
-
             services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme).AddJwtBearer (Options => {
                 Options.RequireHttpsMetadata = false;
                 Options.Audience = "project_api";
                 Options.Authority = "http://localhost:8003";
+            });
+
+            //CAP
+            services.AddCap (options => {
+                options
+                    .UseMySql (conneString)
+                    .UseRabbitMQ (mq => { //发布|订阅 rabbitMQ主机地址
+                        mq.HostName = "10.211.55.5";
+                        mq.UserName = "admin";
+                        mq.Password = "admin";
+                    })
+                    .UseDashboard (); //Cap的可视化管理界面；默认地址:http://localhost:8005/cap
+
+                //注册Consul
+                options.UseDiscovery (d => {
+                    d.DiscoveryServerHostName = "localhost";
+                    d.DiscoveryServerPort = 8500;
+                    d.CurrentNodeHostName = "localhost";
+                    d.CurrentNodePort = 5800;
+                    d.NodeId = "1";
+                    d.NodeName = "CAP No.3 Node";
+                });
             });
 
             services.AddControllers ();

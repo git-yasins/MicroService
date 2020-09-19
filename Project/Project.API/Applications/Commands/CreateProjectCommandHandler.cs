@@ -5,6 +5,7 @@ using Project.Domain.AggregatesModel;
 using ProjectModel = Project.Domain.AggregatesModel.Project;
 namespace Project.API.Applications.Commands {
     /// <summary>
+    /// 增加领域事件
     /// 创建项目
     /// </summary>
     public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommands, ProjectModel> {

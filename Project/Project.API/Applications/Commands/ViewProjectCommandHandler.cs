@@ -5,6 +5,7 @@ using Project.Domain.AggregatesModel;
 
 namespace Project.API.Applications.Commands {
     /// <summary>
+    /// 增加领域事件
     /// 查看项目
     /// </summary>
     public class ViewProjectCommandHandler : IRequestHandler<ViewProjectCommand, int> {
@@ -19,6 +20,12 @@ namespace Project.API.Applications.Commands {
             if (project == null) {
                 throw new Domain.Exceptions.ProjectDomainException ($"project not found:{request.ProjectId}");
             }
+
+            //不能在推荐查看属于自己的项目
+            if (project.UserId == request.UserId) {
+                throw new Domain.Exceptions.ProjectDomainException ($"不能在推荐列表查看自己的项目:{request.ProjectId}");
+            }
+
             //加入查看者
             project.AddViewer (request.UserId, request.UserName, request.Avatar);
             await projectRepository.UnitOfWork.SaveEntitiesAsync ();

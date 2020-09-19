@@ -101,7 +101,6 @@ namespace User.API {
                     d.NodeName = "CAP No.1 Node";
                 });
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
