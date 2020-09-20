@@ -25,6 +25,11 @@ namespace Project.API.Applications.DomainEventHandlers {
         public Task Handle (ProjectCreatedEvent notification, CancellationToken cancellationToken) {
             var @event = new ProjectCreatedIntegrationEvent {
                 ProjectId = notification.Project.Id,
+                Company = notification.Project.Company,
+                FinStage = notification.Project.FinStage,
+                Tags = notification.Project.Tags,
+                Introduction = notification.Project.Introduction,
+                ProjectAvatar = notification.Project.Avatar,
                 CreatedTime = DateTime.Now,
                 UserId = notification.Project.UserId
             };

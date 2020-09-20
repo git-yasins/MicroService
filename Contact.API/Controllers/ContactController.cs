@@ -28,6 +28,18 @@ namespace Contact.API.Controllers {
             return Ok (await _contactRepository.GetContactsAsync (UserIdentity.UserId, cancellation));
         }
 
+        /// <summary>
+        /// 根据指定用户ID查询用户联系人
+        /// </summary>
+        /// <param name="userId">ID</param>
+        /// <param name="cancellation"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route ("{userId}")]
+        public async Task<IActionResult> Get (int userId, CancellationToken cancellation) {
+            return Ok (await _contactRepository.GetContactsAsync (userId, cancellation));
+        }
+
         [HttpPut]
         [Route ("tag")]
         public async Task<IActionResult> TagContact ([FromBody] TagContactInputViewModel viewModel, CancellationToken cancellationToken) {

@@ -1,4 +1,7 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using Consul;
 using Contact.API.Data;
 using Contact.API.Dtos;
 using Contact.API.Infrastructure;
@@ -9,7 +12,9 @@ using DotNetCore.CAP.Dashboard.NodeDiscovery;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,6 +44,14 @@ namespace Contact.API {
 
             //获取Consul配置,映射为ServiceDisvoveryOptions对象
             services.Configure<ServiceDiscoveryOptions> (Configuration.GetSection ("ServiceDiscovery"));
+
+             //注册Consul客户端
+            services.AddSingleton<IConsulClient> (provider => new ConsulClient (cfg => {
+                var serviceConfiguration = provider.GetRequiredService<IOptions<ServiceDiscoveryOptions>> ().Value;
+                if (!string.IsNullOrEmpty (serviceConfiguration.Consul.HttpEndpoint)) {
+                    cfg.Address = new Uri (serviceConfiguration.Consul.HttpEndpoint);
+                }
+            }));
 
             services.AddSingleton<ContactContext> ()
                 .AddScoped<IContactApplyRequestRepository, MongoContactApplyRequestRepository> ()
@@ -91,7 +104,12 @@ namespace Contact.API {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
+        public void Configure (
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IHostApplicationLifetime hostApplicationLifetime,
+            IOptions<ServiceDiscoveryOptions> serviceOptions,
+            IConsulClient consulClient) {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
             }
@@ -100,14 +118,14 @@ namespace Contact.API {
 
             #region Consul    
             //启动时注册Consul服务
-            // hostApplicationLifetime.ApplicationStarted.Register (() => {
-            //     RegisterService (app, serviceOptions, consulClient);
-            // });
+            hostApplicationLifetime.ApplicationStarted.Register (() => {
+                RegisterService (app, serviceOptions, consulClient);
+            });
 
-            // //停止时移除Consul服务
-            // hostApplicationLifetime.ApplicationStopped.Register (() => {
-            //     DeRegisterService (app, serviceOptions, consulClient);
-            // });
+            //停止时移除Consul服务
+            hostApplicationLifetime.ApplicationStopped.Register (() => {
+                DeRegisterService (app, serviceOptions, consulClient);
+            });
             #endregion
 
             app.UseHttpsRedirection ();
@@ -121,45 +139,45 @@ namespace Contact.API {
             });
         }
 
-        // /// <summary>
-        // /// 注册Consul服务发现
-        // /// </summary>
-        // /// <param name="app"></param>
-        // /// <param name="serviceOptions"></param>
-        // private void RegisterService (IApplicationBuilder app, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
-        //     var features = app.Properties["server.Features"] as FeatureCollection;
-        //     var addresses = features.Get<IServerAddressesFeature> ().Addresses.Select (p => new Uri (p));
+        /// <summary>
+        /// 注册Consul服务发现
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="serviceOptions"></param>
+        private void RegisterService (IApplicationBuilder app, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature> ().Addresses.Select (p => new Uri (p));
 
-        //     foreach (var address in addresses) {
-        //         var serviceId = $"{serviceOptions.Value.UserServiceName}_{address.Host}:{address.Port}";
+            foreach (var address in addresses) {
+                var serviceId = $"{serviceOptions.Value.ContactServiceName}_{address.Host}:{address.Port}";
 
-        //         var httpCheck = new AgentServiceCheck {
-        //             DeregisterCriticalServiceAfter = TimeSpan.FromMinutes (1),
-        //             Interval = TimeSpan.FromSeconds (30),
-        //             HTTP = new Uri (address, "HealthCheck").OriginalString //HealthCheck Controller Name 健康检查
-        //         };
+                var httpCheck = new AgentServiceCheck {
+                    DeregisterCriticalServiceAfter = TimeSpan.FromMinutes (1),
+                    Interval = TimeSpan.FromSeconds (30),
+                    HTTP = new Uri (address, "HealthCheck").OriginalString //HealthCheck Controller Name 健康检查
+                };
 
-        //         var registration = new AgentServiceRegistration {
-        //             Checks = new [] { httpCheck },
-        //             Address = address.Host,
-        //             ID = serviceId,
-        //             Name = serviceOptions.Value.UserServiceName,
-        //             Port = address.Port
-        //         };
+                var registration = new AgentServiceRegistration {
+                    Checks = new [] { httpCheck },
+                    Address = address.Host,
+                    ID = serviceId,
+                    Name = serviceOptions.Value.ContactServiceName,
+                    Port = address.Port
+                };
 
-        //         consulClient.Agent.ServiceRegister (registration).GetAwaiter ().GetResult ();
-        //     }
-        // }
+                consulClient.Agent.ServiceRegister (registration).GetAwaiter ().GetResult ();
+            }
+        }
 
-        // //停止Consul服务
-        // private void DeRegisterService (IApplicationBuilder app, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
-        //     var features = app.Properties["server.Features"] as FeatureCollection;
-        //     var addresses = features.Get<IServerAddressesFeature> ().Addresses.Select (p => new Uri (p));
+        //停止Consul服务
+        private void DeRegisterService (IApplicationBuilder app, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
+            var features = app.Properties["server.Features"] as FeatureCollection;
+            var addresses = features.Get<IServerAddressesFeature> ().Addresses.Select (p => new Uri (p));
 
-        //     foreach (var address in addresses) {
-        //         var serviceId = $"{serviceOptions.Value.UserServiceName}_{address.Host}:{address.Port}";
-        //         consulClient.Agent.ServiceDeregister (serviceId).GetAwaiter ().GetResult ();
-        //     }
-        // }
+            foreach (var address in addresses) {
+                var serviceId = $"{serviceOptions.Value.ContactServiceName}_{address.Host}:{address.Port}";
+                consulClient.Agent.ServiceDeregister (serviceId).GetAwaiter ().GetResult ();
+            }
+        }
     }
 }

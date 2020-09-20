@@ -1,0 +1,237 @@
+#centos7安装docker
+yum install -y docker-ce
+https://help.aliyun.com/document_detail/51853.html?spm=5176.10695662.1996646101.searchclickresult.6afa1666yqsfY3ß 
+//阿里云镜像加速
+https://www.cnblogs.com/Chan94/p/10661648.html
+
+解决方案：
+通过阿里云镜像库安装符合最新docker-ce版本的containerd.io
+[root@master ~]# yum install -y https://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/edge/Packages/containerd.io-1.2.13-3.2.el7.x86_64.rpm 
+[root@master ~]# sudo yum -y install docker-ce docker-ce-cli
+
+#docker bash 安装VIM
+https://blog.csdn.net/qq_23315711/article/details/80860799
+
+#docker push
+docker tag yasin/webapi:test yasin2020/webapi:test
+
+yasin/webapi:test //镜像名:TAG名
+yasin2020/webapi:test //docker用户名/上传后的镜像名:TAG名
+
+#运行容器
+docker run -d -p 6379:6379 --name redis01 redis
+-p(point) #内部端口映射外部端口
+-d(detach) #分离运行 在后台运行,不阻止当前命令行,可以继续操作
+
+#docker重命名
+docker rename mysql01 db //将容器myql01改成db
+
+#删除容器
+docker rm mysql
+#删除镜像
+docker rmi mysql/mysql-server
+
+#docker打包
+docker build -t yasin/webapi01:latest .
+
+#DOCKER ping
+https://www.jianshu.com/p/30e13e06341a
+
+#docker 启动
+docker run -d -p 8002:80 --name webapi01 yasin/webapi01
+
+#docker for mac volume
+https://www.jianshu.com/p/1baeabdd0e27
+
+#同服务器DOCKER容器连接MYSQL容器
+//link方式(旧方式)
+docker run -d -p 8002:80 --name webapi01 --link mysql01:db yasin/webapi01  //mysql01为MYSQL容器名称:db为别称,连接字符的数据库名
+
+//network方式 (Brige单台 | Overlay集群)
+1.创建network桥接模式
+docker network create -d bridge mybridge
+2.查看network
+docker network ls
+3.创建容器
+docker run -d -p 8001:80 --name userapi --network mybridge yasin/user.api
+4.连接MYSQL
+docker network connect mybridge mysql01
+   
+#compose构建多个容器依赖和启动顺序
+//yaml语法
+https://yeasy.gitbooks.io/docker_practice/content/compose/commands.html
+//创建容器
+docker-compose build
+
+#重启docker的系统服务
+service docker restart
+
+#阿里云服务器配置
+https://www.cnblogs.com/zhaoxusheng/p/5410467.html
+#centos7 开启端口
+https://www.cnblogs.com/rxbook/p/8110143.html
+#端口和防火墙配置
+https://www.cnblogs.com/heqiuyong/p/10460150.html
+https://www.cnblogs.com/l-hh/p/11213506.html
+
+#DOCKER外部文件挂载卷
+#volumn 方式(单机)
+#mysql
+docker run -d -p 3306:3306 --name mysql01 -v=/srv/mysql/config:/etc -v=/srv/mysql/data:/var/lib/mysql mysql/mysql-server
+#mongodb
+docker run -d -p 27017:27017 --name mongo01 -v=/srv/mongo/config:/data/configdb -v=/srv/mongo/db:/data/db mongo
+vi my.cnf
+[sqld]
+user=mysql
+
+参数解释
+#-d 分离模式,不占用控制台 从内部3306映射到外部3306端口 --name 容器别名
+docker run -d -p 3306:3306 --name mysql01
+冒号前面的目录为LINUX本地文件系统目录,后边为docker容器内部的文件目录
+#mysql配置文件目录映射,需在/目录下,不是~
+-volume=/docuement/docker/mysql/config/my.cnf:/etc/my.cnf
+#mysql数据文件存储目录映射
+-volume=/docuement/docuement/mysql/data:/var/lib/mysql
+#要启动的镜像名
+mysql/mysql-server
+#mount(单机,集群)
+
+#mysql 安装与配置
+https://www.cnblogs.com/starof/p/4680083.html
+https://www.cnblogs.com/geogre123/p/10342486.html
+docker pull mysql/mysql-server
+docker run -d -p 3306:3306 --name mysql01 mysql/mysql-server
+docker logs mysql01
+docker exec -it bash
+mysql -u root -p
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin123';
+//创建用户并授权
+CREATE USER 'yasin'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'yasin'@'localhost' WITH GRANT OPTION;
+#设置用户可以任意连接
+CREATE USER 'yasin'@'%' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'yasin'@'%' WITH GRANT OPTION;
+#设置字符集
+yum install vim
+vim /etc/my.cnf
+[mysqld]
+character-set-server=utf8
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+
+#centos 安装 netcore
+https://www.cnblogs.com/esofar/p/8043792.html
+
+#linux docker部署gitlab本地代码仓库
+https://blog.csdn.net/weixin_38287709/article/details/103314136
+https://www.clxz.top/2019/03/31/111040/
+
+#MAC拼端口
+nc -vz -w 2 10.211.55.5 23
+
+######### 持续集成CI ############
+
+#docker运行 gitlab
+sudo docker run --detach \
+    --hostname 10.211.55.5 \
+    --publish 443:443 --publish 8015:80 --publish 8011:22 \
+    --name gitlab \
+    --restart always \
+    --volume /srv/gitlab/config:/etc/gitlab \
+    --volume /srv/gitlab/logs:/var/log/gitlab \
+    --volume /srv/gitlab/data:/var/opt/gitlab \
+    --volume /srv/gitlab/etc:/var/opt/gitlab/gitlab-rails/etc \
+    gitlab/gitlab-ce:latest
+
+    
+
+#ssh 连接gitlab:    
+https://www.jianshu.com/p/ce582a6db129
+https://blog.whsir.com/post-2429.html 
+gitlab-ctl reconfigure
+本地GIT邮箱 为GITLAB登录邮箱
+
+#修改GITLAB 默认仓库地址
+https://www.cnblogs.com/cyleon/p/11119156.html
+      
+docker-compose.yml   
+  #gitlab密钥
+  https://blog.whsir.com/post-1749.html
+
+  #gitlab 502错误
+  https://www.cnblogs.com/kingkangstudy/p/8834965.html
+  https://www.cnblogs.com/zuikeol/p/11525797.html
+
+  #gitlab-runner 运行时 /bin/bash: line 93: docker-compose: command not found 错误解决办法
+  https://blog.csdn.net/qq_35663625/article/details/107411857
+
+  #docker查看实日志
+  docker logs -f gitlab
+
+  #GitLab Runner
+
+  #Centos安装Gitlab Runners 详细流程 及常见问题(非Docker)
+https://blog.csdn.net/ujm097/article/details/80794740
+
+  https://www.cnblogs.com/hts92/p/11220604.html    
+   https://docs.gitlab.com/runner/install/linux-manually.html
+   https://blog.csdn.net/why_still_confused/article/details/89243006
+
+#运行runner
+   docker run -d --name gitlab-runner --restart always \
+     -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     gitlab/gitlab-runner
+
+
+    docker run --rm -it -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register
+
+    #需要开放CENTOS服务器上的对应端口再注册,否则失败
+    firewall-cmd --zone=public --add-port=8015/tcp --permanent
+    systemctl reload firewalld      
+    systemctl restart sshd
+ 
+#基于gitlab & gitlab-runner 的asp.net core webapi 极简持续集成实践    
+https://www.cnblogs.com/liumengchen-boke/p/11559456.html
+
+#解决-bash: docker-compose: 未找到命令
+https://www.jianshu.com/p/ebb1bab66a88
+    
+
+#docker 下 nginx 反向代理   
+https://www.jianshu.com/p/d7f9510b4eee        
+
+#nginx.conf为文件非目录
+
+docker run --name nginx01 -d -p 80:80 \
+-v /data/nginx/html:/usr/share/nginx/html \
+-v /data/nginx/conf:/etc/nginx/nginx.conf \
+-v /data/nginx/conf.d:/etc/nginx/conf.d \ 
+-v /data/nginx/logs:/var/log/nginx nginx
+
+
+docker exec -it gitlab-runner gitlab-runner register  
+
+
+#DOCKER 私有仓库搭建
+https://www.cnblogs.com/edisonchou/p/docker_registry_repository_setup_introduction.html
+
+docker run -d -v /srv/gitlab/images/registry:/var/lib/registry \
+-p 5000:5000 \
+--restart=always \
+--name registry01 registry
+#查看镜像仓库
+curl http://10.211.55.5:5000/v2/_catalog
+
+#打 TAG
+docker tag userapi:test 10.211.55.5:5000/userapi:test
+
+#consul 
+consul agent --dev 
+
+#rabbitMQ
+https://www.cnblogs.com/yy-cola/p/11089800.html
+#设置rabbitMQ管理界面帐号密码并启动
+docker run -dit --name Myrabbitmq -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin -p 8080:15672 -p 5672:5672 rabbitmq:3-management
