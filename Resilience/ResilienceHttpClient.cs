@@ -92,9 +92,11 @@ namespace Resilience {
         }
 
         private void SetAuthorizationHeader (HttpRequestMessage requestMessage) {
-            var authorizationHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
-            if (!string.IsNullOrEmpty (authorizationHeader)) {
-                requestMessage.Headers.Add ("Authorization", new List<string> { authorizationHeader });
+            if (_httpContextAccessor.HttpContext != null) {
+                var authorizationHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                if (!string.IsNullOrEmpty (authorizationHeader)) {
+                    requestMessage.Headers.Add ("Authorization", new List<string> { authorizationHeader });
+                }
             }
         }
 

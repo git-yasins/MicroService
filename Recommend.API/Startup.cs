@@ -37,6 +37,9 @@ namespace Recommend.API {
                 Options.Authority = "http://localhost:8003";
             });
 
+            //获取Consul配置,映射为ServiceDisvoveryOptions对象
+            services.Configure<ServiceDiscoveryOptions> (Configuration.GetSection ("ServiceDiscovery"));
+            
             services.AddDbContext<RecommendDbContext> (options => {
                     options.UseMySql (Configuration.GetConnectionString ("MySqlRecommend"));
                 })
@@ -74,9 +77,9 @@ namespace Recommend.API {
                     d.DiscoveryServerHostName = "localhost";
                     d.DiscoveryServerPort = 8500;
                     d.CurrentNodeHostName = "localhost";
-                    d.CurrentNodePort = 5803;
+                    d.CurrentNodePort = 8006;
                     d.NodeId = "4";
-                    d.NodeName = "CAP No.4 Node";
+                    d.NodeName = "CAP RecommendAPI Node";
                 });
             });
         }

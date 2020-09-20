@@ -96,9 +96,9 @@ namespace Contact.API {
                     d.DiscoveryServerHostName = "localhost";
                     d.DiscoveryServerPort = 8500;
                     d.CurrentNodeHostName = "localhost";
-                    d.CurrentNodePort = 5801;
+                    d.CurrentNodePort = 8004;
                     d.NodeId = "2";
-                    d.NodeName = "CAP No.2 Node";
+                    d.NodeName = "CAP ContactAPI Node";
                 });
             });
         }

@@ -72,3 +72,9 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/System.Collections.Immutable.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/System.Diagnostics.DiagnosticSource.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/Microsoft.EntityFrameworkCore.Design.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/DotNetCore.CAP.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/DotNetCore.CAP.Dashboard.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/DotNetCore.CAP.MySql.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/DotNetCore.CAP.RabbitMQ.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/RabbitMQ.Client.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Project/Project.API/bin/Debug/netcoreapp3.1/zh/DotNetCore.CAP.Dashboard.resources.dll

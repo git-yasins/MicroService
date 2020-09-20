@@ -2,10 +2,8 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.Dto;
-namespace Project.API.Controllers
-{
-    public class BaseController:ControllerBase
-    {
+namespace Project.API.Controllers {
+    public class BaseController : ControllerBase {
         protected UserIdentity UserIdentity {
             get {
                 var identity = new UserIdentity ();

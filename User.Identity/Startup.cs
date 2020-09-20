@@ -1,17 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using DnsClient;
 using IdentityServer4.Services;
 using IdentityServerCenter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +14,8 @@ using User.Identity.Authentication;
 using User.Identity.Dtos;
 using User.Identity.Infrastructure;
 using User.Identity.Services;
-namespace User.Identity {
+namespace User.Identity
+{
     public class Startup {
         public Startup (IConfiguration configuration) {
             Configuration = configuration;

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Resilience;
-
 namespace Recommend.API.Infrastructure {
     /// <summary>
     /// 弹性恢复客户端工厂

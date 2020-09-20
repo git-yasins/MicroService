@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Project.API.Applications.DomainEventHandlers;
 using Project.API.Applications.Queries;
 using Project.API.Applications.Service;
 using Project.API.Dto;
@@ -46,6 +47,9 @@ namespace Project.API {
             services
                 .AddMediatR (typeof (Startup))
                 .AddScoped<IRecommendService, RecommendService> ()
+                // .AddScoped<ProjectCreatedDomainEventHandler>()
+                // .AddScoped<ProjectJoinedDomainEventHandler>()
+                // .AddScoped<ProjectViewedDomainEventHandler>()
                 .AddScoped<IProjectRepository, ProjectRepository> (sp => {
                     var projectContext = sp.GetRequiredService<ProjectContext> ();
                     return new ProjectRepository (projectContext);
@@ -84,9 +88,9 @@ namespace Project.API {
                     d.DiscoveryServerHostName = "localhost";
                     d.DiscoveryServerPort = 8500;
                     d.CurrentNodeHostName = "localhost";
-                    d.CurrentNodePort = 5800;
-                    d.NodeId = "1";
-                    d.NodeName = "CAP No.3 Node";
+                    d.CurrentNodePort = 8005;
+                    d.NodeId = "3";
+                    d.NodeName = "CAP ProjectAPI Node";
                 });
             });
 

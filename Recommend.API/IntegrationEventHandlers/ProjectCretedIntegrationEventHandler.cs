@@ -26,6 +26,9 @@ namespace Recommend.API.IntegrationEventHandlers {
         /// </summary>
         /// <param name="events">项目信息</param>
         /// <returns></returns>
+        [CapSubscribe ("finbook.projectapi.projectcreated")]
+        // [CapSubscribe ("finbook.projectapi.projectJoined")]
+        // [CapSubscribe ("finbook.projectapi.projectviewed")]
         public async Task CreateRecommendFromProject (ProjectCreatedIntegrationEvent @events) {
             //获取用户服务，获取创建项目的用户信息
             var fromUser = await userService.GetBaseUserInfoAsync (@events.UserId);
