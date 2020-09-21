@@ -14,8 +14,12 @@ using User.Identity.Authentication;
 using User.Identity.Dtos;
 using User.Identity.Infrastructure;
 using User.Identity.Services;
-namespace User.Identity
-{
+using zipkin4net;
+using zipkin4net.Middleware;
+using zipkin4net.Tracers.Zipkin;
+using zipkin4net.Transport.Http;
+
+namespace User.Identity {
     public class Startup {
         public Startup (IConfiguration configuration) {
             Configuration = configuration;
@@ -62,7 +66,7 @@ namespace User.Identity
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
+        public void Configure (IApplicationBuilder app, IHostApplicationLifetime applicationLifetime, IWebHostEnvironment env, ILoggerFactory loggerFactory) {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
             }
@@ -74,8 +78,32 @@ namespace User.Identity
 
             app.UseAuthorization ();
 
+            RegisterZipkinTrace (app, loggerFactory, applicationLifetime);
+
             app.UseEndpoints (endpoints => {
                 endpoints.MapControllers ();
+            });
+        }
+        /// <summary>
+        /// 请求跟踪
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="loggerFactory"></param>
+        /// <param name="applicationLifetime"></param>
+        public void RegisterZipkinTrace (IApplicationBuilder application, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifetime) {
+            applicationLifetime.ApplicationStarted.Register (() => {
+                TraceManager.SamplingRate = 1.0f; //记录数据粒度 全部记录
+                var logger = new TracingLogger (loggerFactory, "zipkin4net");
+                var httpSender = new HttpZipkinSender ("http://10.211.55.5:9411", "application/json");
+                var tracer = new ZipkinTracer (httpSender, new JSONSpanSerializer (), new Statistics ()); //序列化 统计
+                var consoleTracer = new zipkin4net.Tracers.ConsoleTracer ();
+                TraceManager.RegisterTracer (tracer);
+                TraceManager.RegisterTracer (consoleTracer);
+                TraceManager.Start (logger);
+            });
+
+            applicationLifetime.ApplicationStopped.Register (() => {
+                application.UseTracing ("identity_api");
             });
         }
     }

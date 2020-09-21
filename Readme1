@@ -47,6 +47,10 @@ https://www.jianshu.com/p/1baeabdd0e27
 //link方式(旧方式)
 docker run -d -p 8002:80 --name webapi01 --link mysql01:db yasin/webapi01  //mysql01为MYSQL容器名称:db为别称,连接字符的数据库名
 
+#docker 将指定容器加入网络
+docker network connect networkName containName 
+#查看网络
+docker network inspect networkName
 //network方式 (Brige单台 | Overlay集群)
 1.创建network桥接模式
 docker network create -d bridge mybridge
@@ -235,3 +239,39 @@ consul agent --dev
 https://www.cnblogs.com/yy-cola/p/11089800.html
 #设置rabbitMQ管理界面帐号密码并启动
 docker run -dit --name Myrabbitmq -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin -p 8080:15672 -p 5672:5672 rabbitmq:3-management
+
+# docker elasticsearch
+#创建网络为esnet
+docker network create esnet
+#查看网络
+docker network inspect esnet
+
+https://www.cnblogs.com/powerbear/p/11298135.html
+docker pull elasticsearch:7.3.0
+docker run --name es  -p 9200:9200 -p 9300:9300  --network esnet -e "discovery.type=single-node" bdaab402b220
+
+#kibana 版本需与elasticsearch一致  ELASTICSEARCH_URL：地址为创建的http://elasticsearch容器名:9200
+docker pull kibna:7.3.0
+docker run -d --name kibana --network esnet -p 5601:5601 kibana:7.3.0
+docker exec -it kibana bash
+cd config
+vi kibana.yml
+修改 kibana.yml ELASTICSEARCH_URL=http://es:9200
+#-e ELASTICSEARCH_URL=http://es:9200
+
+#Fluentd
+本机：https://blog.csdn.net/qq_21816375/article/details/78011059
+
+docker http://www.pangxieke.com/linux/docker-logging-fluentd.html
+
+docker run -d \
+-p 24224:24224  -v /tmp:/fluentd/etc -e FLUENTD_CONF=fluentd.conf \
+fluent/fluentd
+PS:在其他容器启动时指定--log-driver fluentd 便可对该容器记录日志
+
+#consul
+docker pull consul
+docker run --name consul -d -p 8500:8500 consul
+
+
+docker run -d --log-driver fluentd --log-opt fluentd-address=localhost:24224 --log-opt tag="test" --log-opt fluentd-async-connect --name userapi -p 8002:8002 yasin/userapi:0925

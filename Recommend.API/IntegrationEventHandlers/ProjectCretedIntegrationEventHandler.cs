@@ -36,7 +36,7 @@ namespace Recommend.API.IntegrationEventHandlers {
             var contacs = await contactService.GetContactsByUserId (@events.UserId);
             //遍历通讯录发布创建项目通知
             foreach (var contact in contacs) {
-                //创建项目的推送消息
+                //项目的推送消息
                 var recommend = new ProjectRecommend {
                     FromUserId = @events.UserId,
                     Company = @events.Company,

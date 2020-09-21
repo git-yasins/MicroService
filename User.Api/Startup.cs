@@ -131,13 +131,15 @@ namespace User.API {
                 DeRegisterService (app, serviceOptions, consulClient);
             });
             #endregion
-            RegisterZipkinTrace (app, loggerFactory, hostApplicationLifetime);
+
             //使用权限验证
             app.UseAuthentication ();
 
             app.UseHttpsRedirection ();
 
             app.UseRouting ();
+
+            RegisterZipkinTrace (app, loggerFactory, hostApplicationLifetime);
 
             app.UseAuthorization ();
 

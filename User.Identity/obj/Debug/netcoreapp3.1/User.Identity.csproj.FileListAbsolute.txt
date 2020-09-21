@@ -34,3 +34,7 @@
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Polly.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Resilience.dll
 /Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Resilience.pdb
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/ThriftNetStandard.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/Microsoft.Extensions.PlatformAbstractions.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/zipkin4net.dll
+/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Identity/bin/Debug/netcoreapp3.1/zipkin4net.middleware.aspnetcore.dll

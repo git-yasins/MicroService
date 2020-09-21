@@ -128,6 +128,14 @@
             "Polly": {
               "target": "Package",
               "version": "[5.8.0, )"
+            },
+            "zipkin4net": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
+            "zipkin4net.middleware.aspnetcore": {
+              "target": "Package",
+              "version": "[1.5.0, )"
             }
           },
           "imports": [
