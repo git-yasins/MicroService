@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using Consul;
 using DotNetCore.CAP.Dashboard.NodeDiscovery;
@@ -15,10 +16,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using User.Api.Dtos;
 using User.API.Data;
+using zipkin4net;
+using zipkin4net.Middleware;
+using zipkin4net.Tracers.Zipkin;
+using zipkin4net.Transport.Http;
 
 namespace User.API {
     public class Startup {
@@ -104,7 +110,12 @@ namespace User.API {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime hostApplicationLifetime, IOptions<ServiceDiscoveryOptions> serviceOptions, IConsulClient consulClient) {
+        public void Configure (IApplicationBuilder app,
+            IWebHostEnvironment env,
+            ILoggerFactory loggerFactory,
+            IHostApplicationLifetime hostApplicationLifetime,
+            IOptions<ServiceDiscoveryOptions> serviceOptions,
+            IConsulClient consulClient) {
             if (env.IsDevelopment ()) {
                 app.UseDeveloperExceptionPage ();
             }
@@ -120,7 +131,7 @@ namespace User.API {
                 DeRegisterService (app, serviceOptions, consulClient);
             });
             #endregion
-
+            RegisterZipkinTrace (app, loggerFactory, hostApplicationLifetime);
             //使用权限验证
             app.UseAuthentication ();
 
@@ -174,6 +185,29 @@ namespace User.API {
                 var serviceId = $"{serviceOptions.Value.ServiceName}_{address.Host}:{address.Port}";
                 consulClient.Agent.ServiceDeregister (serviceId).GetAwaiter ().GetResult ();
             }
+        }
+
+        /// <summary>
+        /// 请求跟踪
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="loggerFactory"></param>
+        /// <param name="applicationLifetime"></param>
+        public void RegisterZipkinTrace (IApplicationBuilder application, ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifetime) {
+            applicationLifetime.ApplicationStarted.Register (() => {
+                TraceManager.SamplingRate = 1.0f; //记录数据粒度 全部记录
+                var logger = new TracingLogger (loggerFactory, "zipkin4net");
+                var httpSender = new HttpZipkinSender ("http://10.211.55.5:9411", "application/json");
+                var tracer = new ZipkinTracer (httpSender, new JSONSpanSerializer (), new Statistics ()); //序列化 统计
+                var consoleTracer = new zipkin4net.Tracers.ConsoleTracer ();
+                TraceManager.RegisterTracer (tracer);
+                TraceManager.RegisterTracer (consoleTracer);
+                TraceManager.Start (logger);
+            });
+
+            applicationLifetime.ApplicationStopped.Register (() => {
+                application.UseTracing ("user_api");
+            });
         }
     }
 }

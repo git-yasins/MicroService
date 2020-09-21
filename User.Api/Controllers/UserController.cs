@@ -1,10 +1,12 @@
-using System.Net;
-using System.Security.AccessControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using DotNetCore.CAP;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,7 @@ using Microsoft.Extensions.Options;
 using User.API.Data;
 using User.API.Dtos;
 using User.API.Models;
-using Microsoft.AspNetCore.Authorization;
+using zipkin4net.Transport.Http;
 
 namespace User.API.Controllers {
     //[ApiController]
@@ -101,9 +103,9 @@ namespace User.API.Controllers {
 
             //处理事务
             using (var transaction = _userContext.Database.BeginTransaction ()) {
-               //发布用户变更消息
+                //发布用户变更消息
                 RaiseUserProfileChangedEvent (user);
-              
+
                 _userContext.Users.Update (user);
                 _userContext.SaveChanges ();
 
@@ -207,7 +209,6 @@ namespace User.API.Controllers {
         [Route ("baseinfo/{userId}")]
         public async Task<IActionResult> GetBaseInfo (int userId) {
             //检查用户是否好友关系
-
             var user = await _userContext.Users.SingleOrDefaultAsync (u => u.Id == userId);
             if (user == null) {
                 return NotFound ();
@@ -221,6 +222,5 @@ namespace User.API.Controllers {
                     user.Avatar
             });
         }
-
     }
 }
