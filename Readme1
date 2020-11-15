@@ -1,5 +1,6 @@
 #centos7安装docker
 yum install -y docker-ce
+https://www.cnblogs.com/xiaochina/p/11518007.html
 https://help.aliyun.com/document_detail/51853.html?spm=5176.10695662.1996646101.searchclickresult.6afa1666yqsfY3ß 
 //阿里云镜像加速
 https://www.cnblogs.com/Chan94/p/10661648.html
