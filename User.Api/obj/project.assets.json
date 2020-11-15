@@ -8652,28 +8652,36 @@
     ]
   },
   "packageFolders": {
-    "/Users/tangyaoxiang/.nuget/packages/": {}
+    "C:\\Users\\yasin\\.nuget\\packages\\": {},
+    "D:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/User.Api.csproj",
+      "projectUniqueName": "D:\\document\\project\\dotnet\\MiroService\\User.Api\\User.Api.csproj",
       "projectName": "User.Api",
-      "projectPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/User.Api.csproj",
-      "packagesPath": "/Users/tangyaoxiang/.nuget/packages/",
-      "outputPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/User.Api/obj/",
+      "projectPath": "D:\\document\\project\\dotnet\\MiroService\\User.Api\\User.Api.csproj",
+      "packagesPath": "C:\\Users\\yasin\\.nuget\\packages\\",
+      "outputPath": "D:\\document\\project\\dotnet\\MiroService\\User.Api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "D:\\Microsoft\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
-        "/Users/tangyaoxiang/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\yasin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -8685,6 +8693,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Consul": {
             "target": "Package",
@@ -8769,7 +8778,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

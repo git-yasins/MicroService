@@ -1,32 +1,39 @@
 {
   "format": 1,
   "restore": {
-    "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Contact.API/Contact.API.csproj": {}
+    "D:\\document\\project\\dotnet\\MiroService\\Contact.API\\Contact.API.csproj": {}
   },
   "projects": {
-    "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Contact.API/Contact.API.csproj": {
+    "D:\\document\\project\\dotnet\\MiroService\\Contact.API\\Contact.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Contact.API/Contact.API.csproj",
+        "projectUniqueName": "D:\\document\\project\\dotnet\\MiroService\\Contact.API\\Contact.API.csproj",
         "projectName": "Contact.API",
-        "projectPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Contact.API/Contact.API.csproj",
-        "packagesPath": "/Users/tangyaoxiang/.nuget/packages/",
-        "outputPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Contact.API/obj/",
+        "projectPath": "D:\\document\\project\\dotnet\\MiroService\\Contact.API\\Contact.API.csproj",
+        "packagesPath": "C:\\Users\\yasin\\.nuget\\packages\\",
+        "outputPath": "D:\\document\\project\\dotnet\\MiroService\\Contact.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "/Users/tangyaoxiang/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\yasin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/Resilience.csproj": {
-                "projectPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/Resilience.csproj"
+              "D:\\document\\project\\dotnet\\MiroService\\Resilience\\Resilience.csproj": {
+                "projectPath": "D:\\document\\project\\dotnet\\MiroService\\Resilience\\Resilience.csproj"
               }
             }
           }
@@ -39,6 +46,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "DnsClient": {
               "target": "Package",
@@ -91,30 +99,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/Resilience.csproj": {
+    "D:\\document\\project\\dotnet\\MiroService\\Resilience\\Resilience.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/Resilience.csproj",
+        "projectUniqueName": "D:\\document\\project\\dotnet\\MiroService\\Resilience\\Resilience.csproj",
         "projectName": "Resilience",
-        "projectPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/Resilience.csproj",
-        "packagesPath": "/Users/tangyaoxiang/.nuget/packages/",
-        "outputPath": "/Users/tangyaoxiang/Documents/Project/netcore/MicroServer/Resilience/obj/",
+        "projectPath": "D:\\document\\project\\dotnet\\MiroService\\Resilience\\Resilience.csproj",
+        "packagesPath": "C:\\Users\\yasin\\.nuget\\packages\\",
+        "outputPath": "D:\\document\\project\\dotnet\\MiroService\\Resilience\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "/Users/tangyaoxiang/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\yasin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
             "projectReferences": {}
           }
         },
@@ -126,6 +141,7 @@
       },
       "frameworks": {
         "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
           "dependencies": {
             "Microsoft.AspNetCore.Http": {
               "target": "Package",
@@ -160,7 +176,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.1.301/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
